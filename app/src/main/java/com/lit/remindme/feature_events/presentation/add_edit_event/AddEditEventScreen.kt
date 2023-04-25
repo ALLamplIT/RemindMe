@@ -2,12 +2,9 @@ package com.lit.remindme.feature_events.presentation.add_edit_event
 
 import android.annotation.SuppressLint
 import android.content.ActivityNotFoundException
-import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.provider.ContactsContract
 import android.util.Log
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -68,7 +65,8 @@ fun AddEditEventScreen(
         .ofPattern("dd.MM.yyyy")
     )
 //    val notificationService = NotificationService(context)
-// Test Commit comment Line
+// Test commit comment Line
+// Test commit line 2
 
     LaunchedEffect(key1 = true) {
         viewModel.eventFlow.collectLatest { event ->
@@ -159,7 +157,7 @@ fun AddEditEventScreen(
                     .padding(16.dp))
                 {
                     TextLineRow(
-                        rowModifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         label = context.getString(R.string.string_name_edit_event_label),
                         labelStyle = MaterialTheme.typography.h6,
                         labelColor = MaterialTheme.colors.onSurface,
@@ -214,7 +212,7 @@ fun AddEditEventScreen(
                     )
 
                     TextLineRow(
-                        rowModifier = Modifier.fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         label = context.getString(R.string.string_age_edit_event_label),
                         labelStyle = MaterialTheme.typography.body1,
                         labelColor = MaterialTheme.colors.onSurface,
@@ -273,7 +271,7 @@ fun AddEditEventScreen(
 
 @Composable
 private fun TextLineRow(
-    rowModifier: Modifier,
+    modifier: Modifier,
     label: String,
     labelStyle: TextStyle,
     labelColor: Color = MaterialTheme.colors.onSurface,
@@ -285,19 +283,19 @@ private fun TextLineRow(
     fieldOnFocusChange: (FocusState) -> Unit = {},
     isEditable: Boolean = false,
     doSpacer: Boolean = true,
-    ): Unit {
+    ) {
     Row(
-        modifier = rowModifier
+        modifier = modifier
     )
     {
         Text(
-            modifier = Modifier.width(60.dp),
+            modifier = modifier.width(60.dp),
             text = label,
             style = labelStyle,
             color = labelColor,
             maxLines = 1
         )
-        Spacer(modifier = Modifier.width(8.dp))
+        Spacer(modifier = modifier.width(8.dp))
         if (isEditable) {
             TransparentHintTextField(
                 text = fieldText,
@@ -317,7 +315,7 @@ private fun TextLineRow(
         }
     }
     if (doSpacer)
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = modifier.height(16.dp))
 }
 
 @Composable
@@ -328,7 +326,7 @@ private fun FunctionLineRow(
     labelColor: Color = MaterialTheme.colors.onSurface,
     functionToCall: @Composable () -> Unit,
     doSpacer: Boolean = true,
-    ): Unit {
+    ) {
     Row(
         modifier = modifier
     )
@@ -347,6 +345,7 @@ private fun FunctionLineRow(
         Spacer(modifier = Modifier.height(16.dp))
 }
 
+/*
 fun getContactsEntryCursor(context: Context, lookupId: String): Cursor? {
     val uri = ContactsContract.Data.CONTENT_URI
     val projection = arrayOf(
@@ -365,7 +364,7 @@ fun getContactsEntryCursor(context: Context, lookupId: String): Cursor? {
     val sortOrder: String? = null
     return context.contentResolver.query(uri, projection, where, selectionArgs, sortOrder)
 }
-
+*/
 //                        val thisContactCursor: Cursor? = getContactsEntryCursor(context, viewModel.lookupId)
 //                        if(thisContactCursor != null) {
 //                            Log.d("DBG-Image","#01 ${thisContactCursor.count}")
