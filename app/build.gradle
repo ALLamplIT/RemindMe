@@ -11,14 +11,14 @@ android {
     signingConfigs {
 
         release {
-            storeFile file('C:\\Users\\User\\Documents\\Android\\ALLamplIT.jks')
+            storeFile file('../../ALLamplIT.jks')
             storePassword '8uoiNt7fP+2ggu'
             keyAlias 'App Dev'
             keyPassword '8uoiNt7fP+2ggu'
         }
 
         debug {
-            storeFile file('C:\\Users\\User\\Documents\\Android\\ALLamplIT.jks')
+            storeFile file('../../ALLamplIT.jks')
             storePassword '8uoiNt7fP+2ggu'
             keyAlias 'App Dev'
             keyPassword '8uoiNt7fP+2ggu'
