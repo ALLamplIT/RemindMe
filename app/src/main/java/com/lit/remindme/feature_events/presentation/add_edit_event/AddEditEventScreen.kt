@@ -157,7 +157,7 @@ fun AddEditEventScreen(
                     .padding(16.dp))
                 {
                     TextLineRow(
-                        modifier = Modifier.fillMaxWidth(),
+                        rowModifier = Modifier.fillMaxWidth(),
                         label = context.getString(R.string.string_name_edit_event_label),
                         labelStyle = MaterialTheme.typography.h6,
                         labelColor = MaterialTheme.colors.onSurface,
@@ -212,7 +212,7 @@ fun AddEditEventScreen(
                     )
 
                     TextLineRow(
-                        modifier = Modifier.fillMaxWidth(),
+                        rowModifier = Modifier.fillMaxWidth(),
                         label = context.getString(R.string.string_age_edit_event_label),
                         labelStyle = MaterialTheme.typography.body1,
                         labelColor = MaterialTheme.colors.onSurface,
@@ -271,7 +271,7 @@ fun AddEditEventScreen(
 
 @Composable
 private fun TextLineRow(
-    modifier: Modifier,
+    rowModifier: Modifier,
     label: String,
     labelStyle: TextStyle,
     labelColor: Color = MaterialTheme.colors.onSurface,
@@ -285,17 +285,17 @@ private fun TextLineRow(
     doSpacer: Boolean = true,
     ) {
     Row(
-        modifier = modifier
+        modifier = rowModifier
     )
     {
         Text(
-            modifier = modifier.width(60.dp),
+            modifier = Modifier.width(60.dp),
             text = label,
             style = labelStyle,
             color = labelColor,
             maxLines = 1
         )
-        Spacer(modifier = modifier.width(8.dp))
+        Spacer(modifier = Modifier.width(8.dp))
         if (isEditable) {
             TransparentHintTextField(
                 text = fieldText,
@@ -315,7 +315,7 @@ private fun TextLineRow(
         }
     }
     if (doSpacer)
-        Spacer(modifier = modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable
