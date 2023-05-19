@@ -17,20 +17,18 @@ import javax.inject.Inject
 
 class SyncDeviceContacts @Inject constructor(private val context: Context, private val repository: EventRepository) {
 
-    init
-    {
+    init {
         PermissionsCheck().hasContactsPermission(context)
     }
 
-    fun doSync()
-    {
-        if(PermissionsCheck().hasContactsPermission(context))
+    fun doSync() {
+        if (PermissionsCheck().hasContactsPermission(context))
             privateAddEvents()
     }
 
     private fun privateAddEvents() {
         val cursorContactsEntries: Cursor? = getContactsEntries()
-        if(cursorContactsEntries != null) {
+        if (cursorContactsEntries != null) {
             val dayColumn =
                 cursorContactsEntries.getColumnIndex(ContactsContract.CommonDataKinds.Event.START_DATE)
             val nameColumn =
@@ -72,7 +70,8 @@ class SyncDeviceContacts @Inject constructor(private val context: Context, priva
                             thumbUri = eventThumbURIColumn.toString(),
                             eventDisabled = newEventDisabled,
                             isVisible = true,
-                            id = newEventId)
+                            id = newEventId
+                        )
 //                        if (prevEvent is Event) {
 //                            Log.d("DBG-privateAddEvents","#01 Name: $eventName Day: $eventDate LookupID:$eventLookupKey PrevEntry:$prevEvent URI:$eventThumbURIColumn")
 //                        } else {
@@ -82,6 +81,7 @@ class SyncDeviceContacts @Inject constructor(private val context: Context, priva
                     }
                     cursorContactsEntries.close()
                 }
+                doRemoveDoublesFromRoomDB()
             }
         }
     }
@@ -103,5 +103,40 @@ class SyncDeviceContacts @Inject constructor(private val context: Context, priva
         )
         val sortOrder: String? = null
         return context.contentResolver.query(uri, projection, where, selectionArgs, sortOrder)
+    }
+
+    suspend fun doRemoveDoublesFromRoomDB() {
+        val contactsDBLookupIds: MutableList<String> = getAllLookupIdsFromContactsDB()
+        val roomDBLookupIds: MutableList<String> = mutableListOf()
+
+        repository.getEvents().collect { events ->
+            events.map { it.lookupId }.also { roomDBLookupIds.addAll(it) }
+        }
+
+        val diff = roomDBLookupIds.subtract(contactsDBLookupIds)
+
+        diff.forEach { lookupId ->
+            val event = repository.getEventByLookupId(lookupId)
+            if (event != null && event.eventType != EventTypes.EventFromUser) {
+                repository.deleteEvent(event)
+            }
+        }
+    }
+
+    private fun getAllLookupIdsFromContactsDB(): MutableList<String> {
+        val lookupIds = mutableListOf<String>()
+        val cursor: Cursor? = getContactsEntries()
+        if (cursor != null) {
+            val lookupKeyColumn =
+                cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)
+            while (cursor.moveToNext()) {
+                val lookupKey = cursor.getString(lookupKeyColumn)
+                if (lookupKey != null) {
+                    lookupIds.add(lookupKey)
+                }
+            }
+            cursor.close()
+        }
+        return lookupIds
     }
 }
