@@ -4,12 +4,14 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.ContactsContract
+import android.util.Log
 import com.lit.remindme.feature_events.domain.model.Event
 import com.lit.remindme.feature_events.domain.model.EventTypes
 import com.lit.remindme.feature_events.domain.repository.EventRepository
 import com.lit.remindme.feature_events.presentation.util.PermissionsCheck
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -105,38 +107,26 @@ class SyncDeviceContacts @Inject constructor(private val context: Context, priva
         return context.contentResolver.query(uri, projection, where, selectionArgs, sortOrder)
     }
 
-    suspend fun doRemoveDoublesFromRoomDB() {
-        val contactsDBLookupIds: MutableList<String> = getAllLookupIdsFromContactsDB()
-        val roomDBLookupIds: MutableList<String> = mutableListOf()
+    private suspend fun doRemoveDoublesFromRoomDB() {
+        Log.d("DBG-doRoom","enter")
 
         repository.getEvents().collect { events ->
-            events.map { it.lookupId }.also { roomDBLookupIds.addAll(it) }
+            Log.d("DBG-doRoom","${events.size}")
+            events.forEach  { event  ->
+                Log.d("DBG-doRoom","${event.lookupId}")
+            }
         }
-
-        val diff = roomDBLookupIds.subtract(contactsDBLookupIds)
+/*
+        val diff = roomDBLookupIds.subtract(contactsDBLookupIds.toSet())
 
         diff.forEach { lookupId ->
+            Log.d("DBG-doRoom","id:$lookupId")
             val event = repository.getEventByLookupId(lookupId)
+            Log.d("DBG-doRoom","event:${event.toString()}")
             if (event != null && event.eventType != EventTypes.EventFromUser) {
                 repository.deleteEvent(event)
+                Log.d("DBG-doRoom","del")
             }
-        }
-    }
-
-    private fun getAllLookupIdsFromContactsDB(): MutableList<String> {
-        val lookupIds = mutableListOf<String>()
-        val cursor: Cursor? = getContactsEntries()
-        if (cursor != null) {
-            val lookupKeyColumn =
-                cursor.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)
-            while (cursor.moveToNext()) {
-                val lookupKey = cursor.getString(lookupKeyColumn)
-                if (lookupKey != null) {
-                    lookupIds.add(lookupKey)
-                }
-            }
-            cursor.close()
-        }
-        return lookupIds
+        }*/
     }
 }
