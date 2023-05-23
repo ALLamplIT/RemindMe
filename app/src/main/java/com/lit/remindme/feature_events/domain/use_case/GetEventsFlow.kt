@@ -2,7 +2,6 @@ package com.lit.remindme.feature_events.domain.use_case
 
 import com.lit.remindme.feature_events.domain.model.Event
 import com.lit.remindme.feature_events.domain.repository.EventRepository
-import com.lit.remindme.feature_events.domain.util.getItemColor
 import com.lit.remindme.feature_events.util.EventsOrderType
 import com.lit.remindme.feature_events.util.OrderDirection
 import kotlinx.coroutines.flow.Flow
@@ -10,14 +9,14 @@ import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
-class GetEvents(
+class GetEventsFlow(
     private val repository: EventRepository
 ) {
 
     operator fun invoke(
         eventsOrderType: EventsOrderType = EventsOrderType.Date(OrderDirection.Descending)
     ): Flow<List<Event>> {
-        return repository.getEvents().map { events ->
+        return repository.getEventsFlow().map { events ->
 
 //            val now = LocalDate.now()
 //            var newEvents = emptyList<Event>()

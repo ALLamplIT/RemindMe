@@ -5,12 +5,12 @@ import com.lit.remindme.feature_events.domain.repository.EventRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-class GetEventsByMonthAndDay(
+class GetEventsFlowByMonthAndDay(
     private val repository: EventRepository
 ) {
 
     operator fun invoke(monthAndDay: String, eventStatus: Boolean): Flow<List<Event>> {
-        return repository.getEventsByMonthAndDay(monthAndDay, eventStatus).map { events ->
+        return repository.getEventsFlowByMonthAndDay(monthAndDay, eventStatus).map { events ->
             events.sortedBy { it.title.lowercase() }
         }
     }

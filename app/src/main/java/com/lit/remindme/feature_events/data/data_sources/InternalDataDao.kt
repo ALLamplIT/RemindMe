@@ -8,10 +8,13 @@ import kotlinx.coroutines.flow.Flow
 interface InternalDataDao {
 
     @Query("SELECT * FROM event WHERE isVisible = 1")
-    fun getEvents(): Flow<List<Event>>
+    fun getEventsFlow(): Flow<List<Event>>
+
+    @Query("SELECT * FROM event WHERE isVisible = 1")
+    fun getEventsList(): List<Event>
 
     @Query("SELECT * FROM event WHERE SUBSTR(eventDate, 6, 5) = :monthAndDay AND eventDisabled != :eventStatus")
-    fun getEventsByMonthAndDay(monthAndDay: String, eventStatus: Boolean): Flow<List<Event>>
+    fun getEventsFlowByMonthAndDay(monthAndDay: String, eventStatus: Boolean): Flow<List<Event>>
 
     @Query("SELECT * FROM event WHERE id = :id")
     suspend fun getEventByID(id: Int): Event?

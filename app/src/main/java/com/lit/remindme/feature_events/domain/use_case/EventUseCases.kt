@@ -1,8 +1,8 @@
 package com.lit.remindme.feature_events.domain.use_case
 
 data class EventUseCases(
-    val getEvents: GetEvents,
-    val getEventsByMonthAndDay: GetEventsByMonthAndDay,
+    val getEventsFlow: GetEventsFlow,
+    val getEventsFlowByMonthAndDay: GetEventsFlowByMonthAndDay,
     val deleteEvent: DeleteEvent,
     val disableEvent: DisableEvent,
     val addEvent: AddEvent,

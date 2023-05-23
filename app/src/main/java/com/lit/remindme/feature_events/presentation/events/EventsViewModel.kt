@@ -1,7 +1,5 @@
 package com.lit.remindme.feature_events.presentation.events
 
-import android.content.Context
-import android.util.Log
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -11,21 +9,17 @@ import androidx.lifecycle.viewModelScope
 import com.lit.remindme.Notifications.NotificationWorkerStarter
 import com.lit.remindme.feature_events.data.data_sources.SettingsStore
 import com.lit.remindme.feature_events.data.data_sources.SyncDeviceContacts
-import com.lit.remindme.feature_events.domain.model.Event
 import com.lit.remindme.feature_events.domain.model.Settings
 import com.lit.remindme.feature_events.domain.repository.EventRepository
 import com.lit.remindme.feature_events.domain.use_case.EventUseCases
 import com.lit.remindme.feature_events.util.EventsOrderType
 import com.lit.remindme.feature_events.util.OrderDirection
-import com.lit.remindme.R
 import com.lit.remindme.feature_events.domain.model.EventDomain
-import com.lit.remindme.feature_events.domain.util.getItemColor
 import com.lit.remindme.feature_events.presentation.util.waitUntilMidnight
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import java.time.LocalDate
 import javax.inject.Inject
 
 @HiltViewModel
@@ -153,7 +147,7 @@ class EventsViewModel @Inject constructor(
     private fun privateGetEvents(eventsOrderType: EventsOrderType) {
         privateGetEventsJob?.cancel()
         privateGetEventsJob =
-            eventUseCases.getEvents(eventsOrderType)
+            eventUseCases.getEventsFlow(eventsOrderType)
                 .onEach { events ->
                     events.forEach { event ->
 //                        Log.d("DBG-privateGetEvents", "#01 $event")

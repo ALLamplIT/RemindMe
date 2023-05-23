@@ -42,8 +42,8 @@ object AppModule {
     @Singleton
     fun provideEventUseCases(repository: EventRepository):EventUseCases {
         return EventUseCases(
-            getEvents = GetEvents(repository),
-            getEventsByMonthAndDay = GetEventsByMonthAndDay(repository),
+            getEventsFlow = GetEventsFlow(repository),
+            getEventsFlowByMonthAndDay = GetEventsFlowByMonthAndDay(repository),
             deleteEvent = DeleteEvent(repository),
             disableEvent = DisableEvent(repository),
             addEvent = AddEvent(repository),

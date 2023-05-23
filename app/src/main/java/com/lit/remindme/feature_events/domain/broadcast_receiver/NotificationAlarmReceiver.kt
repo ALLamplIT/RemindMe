@@ -3,7 +3,6 @@ package com.lit.remindme.feature_events.domain.broadcast_receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import com.lit.remindme.Notifications.NotificationService
 import com.lit.remindme.feature_events.data.data_sources.SyncDeviceContacts
 import com.lit.remindme.feature_events.domain.model.Event
@@ -93,7 +92,7 @@ class NotificationAlarmReceiver:BroadcastReceiver() {
         val searchDateString = DateTimeFormatter
             .ofPattern("MM-dd")
             .format(today.plusDays(daysInAdvance.toLong()))
-        val eventFlow = repository.getEventsByMonthAndDay(
+        val eventFlow = repository.getEventsFlowByMonthAndDay(
             searchDateString,
             true
         )
