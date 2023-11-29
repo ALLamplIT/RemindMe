@@ -11,7 +11,6 @@ import com.lit.remindme.feature_events.domain.repository.EventRepository
 import com.lit.remindme.feature_events.presentation.util.PermissionsCheck
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -74,16 +73,16 @@ class SyncDeviceContacts @Inject constructor(private val context: Context, priva
                             isVisible = true,
                             id = newEventId
                         )
-//                        if (prevEvent is Event) {
-//                            Log.d("DBG-privateAddEvents","#01 Name: $eventName Day: $eventDate LookupID:$eventLookupKey PrevEntry:$prevEvent URI:$eventThumbURIColumn")
-//                        } else {
-//                            Log.d("DBG-privateAddEvents","#02 Name: $eventName Day: $eventDate New Entry")
-//                        }
+                        if (prevEvent is Event) {
+                            Log.d("DBG-privateAddEvents","#01 Name: $eventName Day: $eventDate LookupID:$eventLookupKey PrevEntry:$prevEvent URI:$eventThumbURIColumn")
+                        } else {
+                            Log.d("DBG-privateAddEvents","#02 Name: $eventName Day: $eventDate New Entry")
+                        }
                         repository.insertEvent(newEvent)
                     }
                     cursorContactsEntries.close()
+                    doRemoveDoublesFromRoomDB()
                 }
-                doRemoveDoublesFromRoomDB()
             }
         }
     }
@@ -110,11 +109,8 @@ class SyncDeviceContacts @Inject constructor(private val context: Context, priva
     private suspend fun doRemoveDoublesFromRoomDB() {
         Log.d("DBG-doRoom","enter")
 
-        repository.getEvents().collect { events ->
-            Log.d("DBG-doRoom","${events.size}")
-            events.forEach  { event  ->
-                Log.d("DBG-doRoom","${event.lookupId}")
-            }
+        repository.getEventsList().forEach { event ->
+            Log.d("DBG-doRoom","${event.title} -> ${event.lookupId}")
         }
 /*
         val diff = roomDBLookupIds.subtract(contactsDBLookupIds.toSet())

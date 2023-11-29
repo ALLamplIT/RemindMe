@@ -8,12 +8,16 @@ import kotlinx.coroutines.flow.Flow
 class EventRepositoryImpl(
     private val dao: InternalDataDao
 ): EventRepository {
-    override fun getEvents(): Flow<List<Event>> {
-        return dao.getEvents()
+    override fun getEventsFlow(): Flow<List<Event>> {
+        return dao.getEventsFlow()
     }
 
-    override fun getEventsByMonthAndDay(monthAndDay: String, eventStatus: Boolean): Flow<List<Event>> {
-        return dao.getEventsByMonthAndDay(monthAndDay, eventStatus)
+    override suspend fun getEventsList(): List<Event> {
+        return dao.getEventsList()
+    }
+
+    override fun getEventsFlowByMonthAndDay(monthAndDay: String, eventStatus: Boolean): Flow<List<Event>> {
+        return dao.getEventsFlowByMonthAndDay(monthAndDay, eventStatus)
     }
 
     override suspend fun getEventById(id: Int): Event? {

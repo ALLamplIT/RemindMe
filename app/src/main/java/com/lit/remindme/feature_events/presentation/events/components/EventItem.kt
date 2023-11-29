@@ -85,6 +85,14 @@ class EventItem() {
                         overflow = TextOverflow.Ellipsis
                     )
                     Spacer(modifier = Modifier.height(8.dp))
+                    Text(
+                        text = event.lookupId,
+                        style = MaterialTheme.typography.subtitle2,
+                        color = MaterialTheme.colors.onSurface,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier
                             .fillMaxSize()
