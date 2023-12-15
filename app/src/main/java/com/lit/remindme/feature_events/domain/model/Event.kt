@@ -2,9 +2,7 @@ package com.lit.remindme.feature_events.domain.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import com.lit.remindme.R
 
 /*
 */
@@ -45,7 +43,7 @@ data class Event constructor(
             thumbUri = thumbUri,
             eventDisabled = eventDisabled,
             isVisible = isVisible,
-            ColorId = R.color.row_background_1,
+//            ColorId = R.color.row_background_1,
             id = id)
     }
 }

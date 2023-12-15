@@ -32,8 +32,8 @@ android {
         applicationId "com.lit.remindme"
         minSdk 26
         targetSdk 32
-        versionCode 4
-        versionName "0.16"
+        versionCode 9
+        versionName "0.20"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

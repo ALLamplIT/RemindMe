@@ -14,5 +14,5 @@ object RemindMeConstants {
     const val NOTIFICATION_ALARM_ID = 1111
     const val EVENT_MAIN_NOTIFICATION_CHANNEL = "remindme_main"
     const val PERIODIC_WORKER_NAME = "event_worker"
-    const val APP_VERSION = "0.16"
+    const val APP_VERSION = "0.20"
 }

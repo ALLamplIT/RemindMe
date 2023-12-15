@@ -4,7 +4,6 @@ import android.content.Context
 import android.database.Cursor
 import android.net.Uri
 import android.provider.ContactsContract
-import android.util.Log
 import com.lit.remindme.feature_events.domain.model.Event
 import com.lit.remindme.feature_events.domain.model.EventTypes
 import com.lit.remindme.feature_events.domain.repository.EventRepository
@@ -62,7 +61,7 @@ class SyncDeviceContacts @Inject constructor(private val context: Context, priva
                         val newEventId: Int? = if (prevEvent is Event) prevEvent.id else null
                         val newEventDisabled: Boolean =
                             if (prevEvent is Event) prevEvent.eventDisabled else false
-                        val newEvent: Event = Event(
+                        val newEvent = Event(
                             lookupId = eventLookupKey,
                             title = eventName,
                             displayName = eventDate.toString(),
@@ -73,11 +72,11 @@ class SyncDeviceContacts @Inject constructor(private val context: Context, priva
                             isVisible = true,
                             id = newEventId
                         )
-                        if (prevEvent is Event) {
-                            Log.d("DBG-privateAddEvents","#01 Name: $eventName Day: $eventDate LookupID:$eventLookupKey PrevEntry:$prevEvent URI:$eventThumbURIColumn")
-                        } else {
-                            Log.d("DBG-privateAddEvents","#02 Name: $eventName Day: $eventDate New Entry")
-                        }
+//                        if (prevEvent is Event) {
+//                            Log.d("DBG-privateAddEvents","#01 Name: $eventName Day: $eventDate LookupID:$eventLookupKey PrevEntry:$prevEvent URI:$eventThumbURIColumn")
+//                        } else {
+//                            Log.d("DBG-privateAddEvents","#02 Name: $eventName Day: $eventDate New Entry")
+//                        }
                         repository.insertEvent(newEvent)
                     }
                     cursorContactsEntries.close()
@@ -107,22 +106,29 @@ class SyncDeviceContacts @Inject constructor(private val context: Context, priva
     }
 
     private suspend fun doRemoveDoublesFromRoomDB() {
-        Log.d("DBG-doRoom","enter")
+//        Log.d("DBG-doRoom","enter")
 
         repository.getEventsList().forEach { event ->
-            Log.d("DBG-doRoom","${event.title} -> ${event.lookupId}")
-        }
-/*
-        val diff = roomDBLookupIds.subtract(contactsDBLookupIds.toSet())
-
-        diff.forEach { lookupId ->
-            Log.d("DBG-doRoom","id:$lookupId")
-            val event = repository.getEventByLookupId(lookupId)
-            Log.d("DBG-doRoom","event:${event.toString()}")
-            if (event != null && event.eventType != EventTypes.EventFromUser) {
+            if(event.eventType==EventTypes.EventFromContacts && !checkContactForExistence(event.lookupId)) {
                 repository.deleteEvent(event)
-                Log.d("DBG-doRoom","del")
             }
-        }*/
+        }
+    }
+
+    private fun checkContactForExistence(lookupId: String): Boolean {
+        val uri = ContactsContract.Contacts.CONTENT_URI
+        val projection = arrayOf(ContactsContract.Contacts._ID)
+        val selection = ContactsContract.Contacts.LOOKUP_KEY + " = ?"
+        val selectionArgs = arrayOf(lookupId)
+
+        val cursor = context.contentResolver.query(uri, projection, selection, selectionArgs, null)
+
+        cursor?.use {
+            if (it.moveToFirst()) {
+                return true
+            }
+        }
+
+        return false
     }
 }

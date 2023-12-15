@@ -7,8 +7,6 @@ import androidx.compose.animation.core.Spring.DampingRatioNoBouncy
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -19,15 +17,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.core.content.res.ResourcesCompat
 import com.lit.remindme.R
-import com.lit.remindme.feature_events.domain.model.Event
 import com.lit.remindme.feature_events.domain.model.EventDomain
 import com.lit.remindme.feature_events.domain.model.EventTypes
 import com.lit.remindme.feature_events.presentation.util.GetContactImagePainter
-import com.lit.remindme.feature_events.util.EventsOrderType
+import com.lit.remindme.ui.theme.LocalExtraColors
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -48,8 +43,9 @@ class EventItem() {
     ) {
         val thisDate = LocalDate.parse(event.eventDate)
         val now = LocalDate.now()
-        val colorID = getColorID(index, now, thisDate.withYear(now.year))
-        val itemColor = Color(ResourcesCompat.getColor(context.resources, colorID, null))
+//        val colorID = getColorID(context, index, now, thisDate.withYear(now.year))
+//        val itemColor = Color(ResourcesCompat.getColor(context.resources, colorID, null))
+        val itemColor = getColor(index, now, thisDate.withYear(now.year))
         val bitmap = GetContactImagePainter(context = context, event.thumbUri)
         val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
@@ -85,14 +81,17 @@ class EventItem() {
                         overflow = TextOverflow.Ellipsis
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = event.lookupId,
-                        style = MaterialTheme.typography.subtitle2,
-                        color = MaterialTheme.colors.onSurface,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
+//                    Text(
+//                        text = event.lookupId,
+//                        style = TextStyle(
+//                            color = Color.Black,
+//                            fontSize = 10.sp,
+//                            fontWeight = FontWeight.Normal),
+//                        color = MaterialTheme.colors.onSurface,
+//                        maxLines = 1,
+//                        overflow = TextOverflow.Ellipsis
+//                    )
+//                    Spacer(modifier = Modifier.height(4.dp))
                     Row(
                         modifier = Modifier
                             .fillMaxSize()
@@ -168,7 +167,8 @@ class EventItem() {
         }
     }
 
-    private fun getColorID(index: Int, now: LocalDate, eventDate: LocalDate): Int {
+    /*
+    private fun getColorID(context: Context, index: Int, now: LocalDate, eventDate: LocalDate): Int {
         return if (now.isEqual(eventDate) || now.plusDays(1).isEqual(eventDate)) {
             if (index % 2 == 0)
                 R.color.row_background_highlight_1
@@ -179,6 +179,22 @@ class EventItem() {
                 R.color.row_background_1
             else
                 R.color.row_background_2
+        }
+    }
+    */
+
+    @Composable
+    private fun getColor(index: Int, now: LocalDate, eventDate: LocalDate): Color {
+        return if (now.isEqual(eventDate) || now.plusDays(1).isEqual(eventDate)) {
+            if (index % 2 == 0)
+                LocalExtraColors.current.listViewHighlight1
+            else
+                LocalExtraColors.current.listViewHighlight2
+        } else {
+            if (index % 2 == 0)
+                LocalExtraColors.current.listViewBackground1
+            else
+                LocalExtraColors.current.listViewBackground2
         }
     }
 }

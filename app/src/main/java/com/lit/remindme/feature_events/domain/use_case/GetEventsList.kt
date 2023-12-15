@@ -4,15 +4,12 @@ import com.lit.remindme.feature_events.domain.model.Event
 import com.lit.remindme.feature_events.domain.repository.EventRepository
 import com.lit.remindme.feature_events.util.EventsOrderType
 import com.lit.remindme.feature_events.util.OrderDirection
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 class GetEventsList(
     private val repository: EventRepository
 ) {
-
     suspend operator fun invoke(
         eventsOrderType: EventsOrderType = EventsOrderType.Date(OrderDirection.Descending)
     ): List<Event> {
