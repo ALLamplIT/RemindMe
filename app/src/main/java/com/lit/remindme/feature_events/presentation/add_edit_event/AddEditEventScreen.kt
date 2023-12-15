@@ -21,6 +21,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusState
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
@@ -149,7 +150,8 @@ fun AddEditEventScreen(
                         },
                     painter = contactImagePainter,
                     contentDescription = context.getString(R.string.string_contact_image),
-                    alignment = Alignment.Center
+                    alignment = Alignment.Center,
+                    colorFilter = ColorFilter.tint(Color.Red)
                 )
 
                 Column(modifier = Modifier
