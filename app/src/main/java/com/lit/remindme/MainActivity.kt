@@ -37,9 +37,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.core.content.ContextCompat
 
-private const val s =
-    "Damit die App an Ereignisse erinnern kann, muss sie Benachrichtigungen senden können. Nach Betätigung des Buttons wird die entsprechende Einstellung geöffnet."
-
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     private val _notificationHasStarted = mutableStateOf<Int>(0)
@@ -49,9 +46,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d("DBG Main","#00")
+//        Log.d("DBG Main","#00")
         setContent {
-            Log.d("DBG Main","#01")
+//            Log.d("DBG Main","#01")
             requestGeneralPermissions()
 
             val eventId = intent.getIntExtra("eventId",-1)
@@ -102,6 +99,10 @@ class MainActivity : ComponentActivity() {
         val permissionsToCheckFor = mutableListOf<String>()
         if (!PermissionsCheck().hasContactsPermission(this))
             permissionsToCheckFor.add(Manifest.permission.READ_CONTACTS)
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            permissionsToCheckFor.add(Manifest.permission.POST_NOTIFICATIONS)
+        }
 
         if (permissionsToCheckFor.isNotEmpty()) {
             ActivityCompat.requestPermissions(this,permissionsToCheckFor.toTypedArray(),
