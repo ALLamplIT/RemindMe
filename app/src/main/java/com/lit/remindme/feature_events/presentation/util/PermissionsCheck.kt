@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 
@@ -19,6 +20,9 @@ class PermissionsCheck {
 
     fun hasExactAlarmPermission(context: Context) =
         Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-        ActivityCompat.checkSelfPermission(context,
-            Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED
+                ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.SCHEDULE_EXACT_ALARM
+                ) == PackageManager.PERMISSION_GRANTED
+
 }

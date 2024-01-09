@@ -9,6 +9,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.util.Log
+import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
@@ -26,6 +28,7 @@ class NotificationWorker(
     private val workerParams: WorkerParameters,
 ): CoroutineWorker(context, workerParams) {
 
+    @RequiresApi(Build.VERSION_CODES.S)
     @SuppressLint("ScheduleExactAlarm")
     override suspend fun doWork(): Result {
         Log.d("DBG-NotificationWorker doWork","Started")
@@ -49,7 +52,8 @@ class NotificationWorker(
 
         val notificationAlarmIntent = Intent(context, NotificationAlarmReceiver::class.java)
 
-        if (PermissionsCheck().hasExactAlarmPermission(context)) {
+//        if (PermissionsCheck().hasExactAlarmPermission(context)) { Does not work as expected!
+        if(alarmManager.canScheduleExactAlarms()) {
             val alarm = alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 alarmTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000,

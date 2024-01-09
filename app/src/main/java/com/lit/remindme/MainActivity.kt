@@ -1,6 +1,7 @@
 package com.lit.remindme
 
 import android.Manifest
+import android.app.AlarmManager
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -36,6 +37,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 
 @AndroidEntryPoint
@@ -97,11 +99,13 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     private fun requestGeneralPermissions() {
+        val localContext = LocalContext.current
+
         val permissionsToCheckFor = mutableListOf<String>()
-        if (!PermissionsCheck().hasContactsPermission(this))
+        if (!PermissionsCheck().hasContactsPermission(localContext))
             permissionsToCheckFor.add(Manifest.permission.READ_CONTACTS)
 
-        if(!PermissionsCheck().hasPostPermission(this)) {
+        if(!PermissionsCheck().hasPostPermission(localContext)) {
             permissionsToCheckFor.add(Manifest.permission.POST_NOTIFICATIONS)
         }
 
@@ -110,7 +114,7 @@ class MainActivity : ComponentActivity() {
                 RemindMeConstants.REQUEST_PERMISSIONS_REQUEST_CODE)
         }
 
-        if (!PermissionsCheck().hasExactAlarmPermission(this)){
+        if (!PermissionsCheck().hasExactAlarmPermission(localContext)){
             val onClickFunc = {
                 val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
                 startActivity(intent)
