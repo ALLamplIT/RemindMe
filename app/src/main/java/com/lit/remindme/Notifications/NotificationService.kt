@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import com.lit.remindme.MainActivity
 import com.lit.remindme.R
 import com.lit.remindme.feature_events.domain.model.RemindMeConstants
+import com.lit.remindme.feature_events.presentation.util.PermissionsCheck
 import java.util.*
 
 class NotificationService(private val context: Context): NotificationServiceInterface {
@@ -21,7 +22,7 @@ class NotificationService(private val context: Context): NotificationServiceInte
 
     override fun sendNotification(inDays: Int, name: String, date: String, anniversary: String, eventId: Int) {
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+        if (PermissionsCheck().hasPostPermission(context)) {
             Log.d("DBG-NotificationService", "$name $eventId")
 
             val uniqueInt = Random().nextInt(0xFFFFFFF);
@@ -32,7 +33,7 @@ class NotificationService(private val context: Context): NotificationServiceInte
                 context,
                 uniqueInt,
                 remindMeMainScreenIntent,
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) PendingIntent.FLAG_IMMUTABLE else 0
+                PendingIntent.FLAG_IMMUTABLE
             )
             val inDaysText = when (inDays) {
                 0 -> context.getString(R.string.string_main_notification_today_text)

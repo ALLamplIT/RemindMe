@@ -16,6 +16,7 @@ import androidx.work.workDataOf
 import com.lit.remindme.feature_events.data.data_sources.SettingsStore
 import com.lit.remindme.feature_events.domain.broadcast_receiver.NotificationAlarmReceiver
 import com.lit.remindme.feature_events.domain.model.RemindMeConstants
+import com.lit.remindme.feature_events.presentation.util.PermissionsCheck
 import kotlinx.coroutines.*
 import java.time.*
 import java.time.format.DateTimeFormatter
@@ -48,7 +49,7 @@ class NotificationWorker(
 
         val notificationAlarmIntent = Intent(context, NotificationAlarmReceiver::class.java)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(context, Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED) {
+        if (PermissionsCheck().hasExactAlarmPermission(context)) {
             val alarm = alarmManager.setExactAndAllowWhileIdle(
                 AlarmManager.RTC_WAKEUP,
                 alarmTime.atZone(ZoneId.systemDefault()).toEpochSecond() * 1000,

@@ -28,6 +28,7 @@ import com.lit.remindme.ui.theme.RemindMeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import android.provider.Settings
 import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -100,7 +101,7 @@ class MainActivity : ComponentActivity() {
         if (!PermissionsCheck().hasContactsPermission(this))
             permissionsToCheckFor.add(Manifest.permission.READ_CONTACTS)
 
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+        if(!PermissionsCheck().hasPostPermission(this)) {
             permissionsToCheckFor.add(Manifest.permission.POST_NOTIFICATIONS)
         }
 
@@ -109,7 +110,7 @@ class MainActivity : ComponentActivity() {
                 RemindMeConstants.REQUEST_PERMISSIONS_REQUEST_CODE)
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(this, Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED){
+        if (!PermissionsCheck().hasExactAlarmPermission(this)){
             val onClickFunc = {
                 val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
                 startActivity(intent)
