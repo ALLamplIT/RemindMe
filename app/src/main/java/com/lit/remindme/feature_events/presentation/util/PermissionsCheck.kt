@@ -9,4 +9,9 @@ class PermissionsCheck {
     fun hasContactsPermission(context: Context) =
         ActivityCompat.checkSelfPermission(context,
             Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
+
+    fun hasExactAlarmPermission(context: Context) =
+        ActivityCompat.checkSelfPermission(context,
+            Manifest.permission.SCHEDULE_EXACT_ALARM) == PackageManager.PERMISSION_GRANTED
+
 }

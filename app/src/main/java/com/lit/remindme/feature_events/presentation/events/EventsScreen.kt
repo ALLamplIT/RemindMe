@@ -2,6 +2,9 @@ package com.lit.remindme.feature_events.presentation.events
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.provider.Settings
 import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.clickable
@@ -21,11 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.lit.remindme.R
 import com.lit.remindme.feature_events.presentation.events.components.EventItem
 import com.lit.remindme.feature_events.presentation.events.components.OrderSection
+import com.lit.remindme.feature_events.presentation.util.PermissionsCheck
 import com.lit.remindme.feature_events.presentation.util.Screen
 import kotlinx.coroutines.*
 

@@ -118,12 +118,15 @@ fun AddEditEventScreen(
                 .padding(0.dp, 16.dp, 0.dp, 0.dp)
         ) {
             val bitmap = GetContactImagePainter(context = LocalContext.current, viewModel.thumbURI)
+            var isDefaultIcon = true
             var contactImagePainter: Painter =
                 painterResource(id = R.drawable.ic_baseline_no_photography_24)
 
-            if (bitmap != null)
+            if (bitmap != null) {
                 contactImagePainter =
                     BitmapPainter(bitmap, IntOffset.Zero, IntSize(bitmap.width, bitmap.height))
+                isDefaultIcon = false
+            }
 
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -151,7 +154,7 @@ fun AddEditEventScreen(
                     painter = contactImagePainter,
                     contentDescription = context.getString(R.string.string_contact_image),
                     alignment = Alignment.Center,
-                    colorFilter = ColorFilter.tint(Color.Red)
+                    colorFilter = if (isDefaultIcon) ColorFilter.tint(MaterialTheme.colors.onSurface) else null
                 )
 
                 Column(modifier = Modifier

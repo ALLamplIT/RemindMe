@@ -39,6 +39,7 @@ class NotificationWorker(
             .ofPattern("dd.MM.yyyy HH:mm:ss")
             .format(alarmTime)
         )
+
         val notificationAlarmIntent = Intent(context, NotificationAlarmReceiver::class.java)
 
         val alarm = alarmManager.setExactAndAllowWhileIdle(

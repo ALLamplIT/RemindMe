@@ -16,7 +16,7 @@
         android:roundIcon="@drawable/ic_baseline_circle_notifications_24"
         android:supportsRtl="true"
         android:theme="@style/Theme.RemindMe"
-        tools:targetApi="31">
+        tools:targetApi="33">
         <activity
             android:name=".MainActivity"
             android:exported="true"

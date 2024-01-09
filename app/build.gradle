@@ -26,14 +26,14 @@ android {
     }
 
 //    namespace 'com.lit.remindme'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.lit.remindme"
         minSdk 26
-        targetSdk 32
-        versionCode 9
-        versionName "0.20"
+        targetSdk 33
+        versionCode 12
+        versionName "0.21"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

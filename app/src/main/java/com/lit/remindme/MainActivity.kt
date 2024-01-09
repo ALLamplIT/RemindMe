@@ -1,6 +1,9 @@
 package com.lit.remindme
 
 import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -23,7 +26,19 @@ import com.lit.remindme.feature_events.presentation.util.PermissionsCheck
 import com.lit.remindme.feature_events.presentation.util.Screen
 import com.lit.remindme.ui.theme.RemindMeTheme
 import dagger.hilt.android.AndroidEntryPoint
+import android.provider.Settings
+import android.util.Log
+import androidx.compose.material.AlertDialog
+import androidx.compose.material.Button
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.core.content.ContextCompat
 
+private const val s =
+    "Damit die App an Ereignisse erinnern kann, muss sie Benachrichtigungen senden können. Nach Betätigung des Buttons wird die entsprechende Einstellung geöffnet."
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,14 +48,15 @@ class MainActivity : ComponentActivity() {
     @ExperimentalAnimationApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestPermissions()
 
+        Log.d("DBG Main","#00")
         setContent {
+            Log.d("DBG Main","#01")
+            requestGeneralPermissions()
+
             val eventId = intent.getIntExtra("eventId",-1)
 
-//            Log.d("DBG Main","Start")
             RemindMeTheme {
-
                 if(notificationHasStarted.value == 0) {
                     _notificationHasStarted.value = 1
                     NotificationWorkerStarter(applicationContext).start()
@@ -81,7 +97,8 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun requestPermissions() {
+    @Composable
+    private fun requestGeneralPermissions() {
         val permissionsToCheckFor = mutableListOf<String>()
         if (!PermissionsCheck().hasContactsPermission(this))
             permissionsToCheckFor.add(Manifest.permission.READ_CONTACTS)
@@ -89,6 +106,37 @@ class MainActivity : ComponentActivity() {
         if (permissionsToCheckFor.isNotEmpty()) {
             ActivityCompat.requestPermissions(this,permissionsToCheckFor.toTypedArray(),
                 RemindMeConstants.REQUEST_PERMISSIONS_REQUEST_CODE)
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && ContextCompat.checkSelfPermission(this, Manifest.permission.SCHEDULE_EXACT_ALARM) != PackageManager.PERMISSION_GRANTED){
+            val onClickFunc = {
+                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                startActivity(intent)
+            }
+
+            informationDialog(this.getString(R.string.string_permission_request_title), this.getString(R.string.string_permission_request_exact_notifications), this.getString(R.string.string_permission_request_button_continue), onClickFunc)
+        }
+    }
+
+    @Composable
+    private fun informationDialog(title : String, infoText : String, button : String, onClickFunc : () -> Unit) {
+        var showDialog by remember { mutableStateOf(true) }
+
+        if (showDialog) {
+            AlertDialog(
+                onDismissRequest = { showDialog = false },
+                title = { Text(title) },
+                text = { Text(infoText) },
+                confirmButton = {
+                    Button(
+                        onClick = { showDialog = false
+                            onClickFunc()
+                        }
+                    ) {
+                        Text(button)
+                    }
+                }
+            )
         }
     }
 }

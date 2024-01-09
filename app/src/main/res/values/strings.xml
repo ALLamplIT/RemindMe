@@ -38,4 +38,7 @@
     <string name="string_daily_reminder_time_lable">Erinnerungs-Zeitpunkt:</string>
     <string name="string_version_lable">Version</string>
     <string name="string_age_edit_event_label">Jahre</string>
+    <string name="string_permission_request_title">Berechtigung erforderlich</string>
+    <string name="string_permission_request_exact_notifications">Damit die App an Ereignisse erinnern kann, muss sie Benachrichtigungen senden können. Nach Betätigung des Buttons wird die entsprechende Einstellung geöffnet.</string>
+    <string name="string_permission_request_button_continue">Weiter</string>
 </resources>
