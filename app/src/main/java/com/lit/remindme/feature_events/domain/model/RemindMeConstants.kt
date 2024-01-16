@@ -1,5 +1,7 @@
 package com.lit.remindme.feature_events.domain.model
 
+import com.lit.remindme.BuildConfig
+
 object RemindMeConstants {
     const val REQUEST_PERMISSIONS_REQUEST_CODE = 0
     const val WORKER_INTERVAL_IN_MINUTES = 60
@@ -14,5 +16,5 @@ object RemindMeConstants {
     const val NOTIFICATION_ALARM_ID = 1111
     const val EVENT_MAIN_NOTIFICATION_CHANNEL = "remindme_main"
     const val PERIODIC_WORKER_NAME = "event_worker"
-    const val APP_VERSION = "0.24"
+    const val APP_VERSION = BuildConfig.VERSION_NAME
 }

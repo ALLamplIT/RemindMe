@@ -29,7 +29,7 @@ class NotificationWorker(
 ): CoroutineWorker(context, workerParams) {
 
     @RequiresApi(Build.VERSION_CODES.S)
-    @SuppressLint("ScheduleExactAlarm")
+//    @SuppressLint("ScheduleExactAlarm")
     override suspend fun doWork(): Result {
         Log.d("DBG-NotificationWorker doWork","Started")
         val alarmManager = context.getSystemService(AlarmManager::class.java)

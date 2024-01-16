@@ -3,9 +3,9 @@ package com.lit.remindme
 import android.Manifest
 import android.app.AlarmManager
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.os.Build
+import android.net.Uri
 import android.os.Bundle
+import android.os.PowerManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
@@ -28,8 +28,6 @@ import com.lit.remindme.feature_events.presentation.util.Screen
 import com.lit.remindme.ui.theme.RemindMeTheme
 import dagger.hilt.android.AndroidEntryPoint
 import android.provider.Settings
-import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -38,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.content.ContextCompat
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -100,6 +97,7 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun requestGeneralPermissions() {
         val localContext = LocalContext.current
+        val powerManager = localContext.getSystemService(POWER_SERVICE) as PowerManager
 
         val permissionsToCheckFor = mutableListOf<String>()
         if (!PermissionsCheck().hasContactsPermission(localContext))
@@ -114,13 +112,36 @@ class MainActivity : ComponentActivity() {
                 RemindMeConstants.REQUEST_PERMISSIONS_REQUEST_CODE)
         }
 
-        if (!PermissionsCheck().hasExactAlarmPermission(localContext)){
+        if (!powerManager.isIgnoringBatteryOptimizations(localContext.packageName)){
             val onClickFunc = {
-                val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                    data = Uri.parse("package:${localContext.packageName}")
+                }
                 startActivity(intent)
             }
+            informationDialog(
+                this.getString(R.string.string_battery_optimization_exemption_request_title),
+                this.getString(R.string.string_battery_optimization_exemption_request_text),
+                this.getString(R.string.string_permission_request_button_continue),
+                onClickFunc
+            )
+        }
 
-            informationDialog(this.getString(R.string.string_permission_request_title), this.getString(R.string.string_permission_request_exact_notifications), this.getString(R.string.string_permission_request_button_continue), onClickFunc)
+        if (!PermissionsCheck().hasExactAlarmPermission(localContext)){
+            val alarmManager = localContext.getSystemService(AlarmManager::class.java)
+            if(!alarmManager.canScheduleExactAlarms()) {
+                val onClickFunc = {
+                    val intent = Intent(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+                    startActivity(intent)
+                }
+
+                informationDialog(
+                    this.getString(R.string.string_permission_request_title),
+                    this.getString(R.string.string_permission_request_exact_notifications_text),
+                    this.getString(R.string.string_permission_request_button_continue),
+                    onClickFunc
+                )
+            }
         }
     }
 

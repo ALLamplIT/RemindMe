@@ -39,6 +39,8 @@
     <string name="string_version_lable">Version</string>
     <string name="string_age_edit_event_label">Jahre</string>
     <string name="string_permission_request_title">Berechtigung erforderlich</string>
-    <string name="string_permission_request_exact_notifications">Damit die App an Ereignisse erinnern kann, muss sie Benachrichtigungen senden können. Nach Betätigung des Buttons wird die entsprechende Einstellung geöffnet.</string>
+    <string name="string_permission_request_exact_notifications_text">Damit die App an Ereignisse erinnern kann, muss sie Benachrichtigungen senden können. Nach Betätigung des Buttons wird die entsprechende Einstellung geöffnet.</string>
+    <string name="string_battery_optimization_exemption_request_title">Energie Optimierung</string>
+    <string name="string_battery_optimization_exemption_request_text">Um Benachrichtigungen zum eingestellten Zeitpunkt anzeigen zu können, darf die App nicht durch das Energie-Management limitiert werden. Wählen Sie Zulassen um dies zu ermöglichen.</string>
     <string name="string_permission_request_button_continue">Weiter</string>
 </resources>
