@@ -4,4 +4,4 @@ The app retrieves event data from the user’s contact provider (e.g., birthdays
 
 The project illustrates clean code principles, modular architecture, and platform-integrated event handling on Android.
 
-(c) Lampl IT 2025
+© 2023 Lampl IT (Andreas Lampl) – All rights reserved.
